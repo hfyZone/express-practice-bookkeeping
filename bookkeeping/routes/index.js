@@ -24,7 +24,7 @@ router.post("/account", (req, res) => {
   let id = shortid.generate()
 
   db.get('accounts').unshift({id:id, ...req.body}).write();
-  res.send("添加记录")
+  res.render('success', {msg: '添加成功', url: '/account'})
 })
 
 module.exports = router;
