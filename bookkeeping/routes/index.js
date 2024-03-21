@@ -1,6 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
+// lowdb
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+const adapter = new FileSync(__dirname + '/../data/db.json')
+const db = low(adapter)
+//shortid
+const shortid = require('shortid')
+
+
 /* 记账本列表 */
 router.get('/account', function(req, res, next) {
   res.render('list')
@@ -12,7 +21,9 @@ router.get('/create', function(req, res, next) {
 });
 // 新增记录 用于对接create.ejs的form表单
 router.post("/account", (req, res) => {
-  console.log(req.body)
+  let id = shortid.generate()
+
+  db.get('accounts').unshift({id:id, ...req.body}).write();
   res.send("添加记录")
 })
 
